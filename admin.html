@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+.topbar {
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px gray;
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.logout {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+ul {
+    padding-left: 15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+<h2>⚙ Admin Panel</h2>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>🏥 Hospitals</h2>
+<p>Manage ICU Beds</p>
+<ul id="icuList">
+Loading...
+</ul>
+</div>
+
+
+<div class="card">
+<h2>👥 Users</h2>
+<p>Patients / Doctors</p>
+</div>
+
+<!-- 👨‍⚕️ Doctor Details -->
+<div class="card">
+<h2>👨‍⚕️ Doctor Details</h2>
+<ul id="doctorList">Loading...</ul>
+</div>
+
+<!-- 🩸 Blood Centers -->
+<div class="card">
+<h2>🩸 Blood Centers</h2>
+<ul id="bloodList">Loading...</ul>
+</div>
+
+</div>
+
+<button class="logout" onclick="window.location.href='login.html'">
+Logout
+</button>
+
+<!-- 🔥 Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+
+// 🔴 REPLACE WITH YOUR FIREBASE CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyDWfO7uvrIFoQ1OkV6g4XdzmRjKq6lJxGs",
+  authDomain: "healthcare-app-cf709.firebaseapp.com",
+  projectId: "healthcare-app-cf709"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+
+// 👨‍⚕️ Load Doctors
+function loadDoctors() {
+    const list = document.getElementById("doctorList");
+
+    db.collection("doctors").onSnapshot((snapshot) => {
+
+        list.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+            let data = doc.data();
+            let color = data.status === "Online" ? "green" : "red";
+
+            list.innerHTML += `
+                <li>
+                👨‍⚕️ <b>${data.name}</b><br>
+                Status: <span style="color:${color}">
+                ${data.status}</span><br>
+                Salary: ₹${data.salary}
+                <hr>
+                </li>
+            `;
+        });
+
+    });
+}
+
+
+// 🩸 Load Blood Centers
+function loadBloodCenters() {
+    const list = document.getElementById("bloodList");
+
+    db.collection("blood_centers").onSnapshot((snapshot) => {
+
+        list.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+            let data = doc.data();
+            let color = data.units > 0 ? "green" : "red";
+
+            list.innerHTML += `
+                <li>
+                🏥 <b>${data.name}</b><br>
+                Blood Type: ${data.bloodType || "N/A"}<br>
+                Units: <span style="color:${color}">
+                ${data.units}</span><br>
+                Location: 📍 ${data.location}
+                <hr>
+                </li>
+            `;
+        });
+
+    });
+}
+
+    function loadICU() {
+    const list = document.getElementById("icuList");
+
+    db.collection("icu_beds").onSnapshot((snapshot) => {
+
+        list.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+            let data = doc.data();
+            let color = data.beds > 0 ? "green" : "red";
+            let status = data.beds > 0 ? "Available" : "Full";
+
+            list.innerHTML += `
+                <li>
+                🏥 <b>${data.name}</b><br>
+                Beds: <span style="color:${color}">
+                ${data.beds} (${status})</span><br>
+                Location: 📍 ${data.location}
+                <hr>
+                </li>
+            `;
+        });
+
+    });
+}
+
+// call function
+loadICU();
+
+// Run both
+loadDoctors();
+loadBloodCenters();
+
+</script>
+
+</body>
+</html>

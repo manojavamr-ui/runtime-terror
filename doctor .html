@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard - LifeLine</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(rgba(10, 107, 95, 0.85), rgba(26, 154, 139, 0.85)),
+                url('https://images.unsplash.com/photo-1559757148-5e995136c7b2?q=80&w=2070') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: #111827;
+    position: relative;
+}
+
+/* Topbar */
+.topbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    padding: 20px 30px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.topbar h2 {
+    color: #0A6B5F;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.topbar p {
+    color: #1A9A8B;
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    color: #0A6B5F;
+    margin-bottom: 15px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1A9A8B;
+    margin-bottom: 20px;
+}
+
+.card button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #0A6B5F, #1A9A8B);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(26, 154, 139, 0.4);
+}
+
+.card.big {
+    grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+    .card.big { grid-column: span 1; }
+}
+
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+input:focus, select:focus {
+    border-color: #1A9A8B;
+    box-shadow: 0 0 0 3px rgba(26, 154, 139, 0.15);
+}
+
+#prescriptionResult {
+    margin-top: 20px;
+    padding: 18px;
+    background: #f0fdf4;
+    border-radius: 12px;
+    border-left: 5px solid #1A9A8B;
+    line-height: 1.7;
+}
+
+.logout {
+    display: block;
+    margin: 20px auto 40px;
+    padding: 14px 40px;
+    background: #d63031;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==================== CHATBOT ==================== */
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.chatbot-icon {
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #0A6B5F, #1A9A8B);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 8px 25px rgba(26, 154, 139, 0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.chatbot-icon:hover {
+    transform: scale(1.1);
+}
+
+.chat-window {
+    display: none;
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    height: 520px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.chat-window.active {
+    display: flex;
+}
+
+.chat-header {
+    background: linear-gradient(90deg, #0A6B5F, #1A9A8B);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f8fffe;
+}
+
+.chat-message {
+    margin-bottom: 15px;
+    max-width: 85%;
+}
+
+.chat-message.user {
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat-message .bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.chat-message.bot .bubble {
+    background: #e6f4f1;
+    border-bottom-left-radius: 5px;
+}
+
+.chat-message.user .bubble {
+    background: #0A6B5F;
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.chat-footer {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-footer input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 15px;
+}
+
+.chat-footer button {
+    background: #1A9A8B;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <h2>👨‍⚕ Doctor Dashboard</h2>
+    <p>Live Patient Data &amp; Emergency Cases • Bengaluru</p>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h2>📅 Today's Appointments</h2>
+        <p id="appointCount">0 Patients Today</p>
+        <button onclick="viewSchedule()">View Full Schedule</button>
+    </div>
+
+    <div class="card">
+        <h2>🧑‍⚕ Patient Requests</h2>
+        <p id="requestCount">0 New Requests</p>
+        <button onclick="openRequests()">Open All Requests</button>
+    </div>
+
+    <div class="card">
+        <h2>🚨 Emergency Cases</h2>
+        <p id="emergencyCount">0 Critical Alerts</p>
+        <button onclick="emergencyNow()">Attend Emergency Now</button>
+    </div>
+
+    <div class="card big">
+        <h2>🩺 Patient Details &amp; Precautions</h2>
+        <select id="patientSelect" onchange="showPatientDetails()">
+            <option value="">Select a Patient</option>
+        </select>
+        <div id="patientInfo"></div>
+    </div>
+
+    <div class="card big">
+        <h2>💊 Quick Prescription Generator</h2>
+        <input type="text" id="patientName" placeholder="Patient Name">
+        <input type="text" id="medicine" placeholder="Medicine Name (e.g., Paracetamol 500mg)">
+        <input type="text" id="days" placeholder="Duration (e.g., 5 days)">
+        <button onclick="createPrescription()">Generate Prescription</button>
+        <div id="prescriptionResult"></div>
+    </div>
+
+    <div class="card">
+        <h2>📞 Doctor Helpline</h2>
+        <p><strong>Helpline:</strong> 080-4000 1234</p>
+        <p><strong>Email:</strong> doctor@lifeline.health</p>
+        <p><strong>Emergency Support:</strong> Available 24×7</p>
+    </div>
+</div>
+
+<button class="logout" onclick="window.location.href='login.html'">
+    Logout
+</button>
+
+<!-- ==================== CHATBOT ==================== -->
+<div class="chatbot-container">
+    <div class="chatbot-icon" onclick="toggleChat()">💬</div>
+    
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <span>LifeLine Assistant</span>
+            <span onclick="toggleChat()" style="cursor:pointer; font-size:20px;">✕</span>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <!-- Messages will be added here by JS -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Ask anything... (e.g., dosage, symptoms)" onkeypress="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()">↑</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============== Existing Dashboard Script ==============
+let patients = JSON.parse(localStorage.getItem("patients")) || [];
+
+if (patients.length === 0) {
+    patients = [
+        {name: "Rahul Sharma", symptom: "High Fever & Cold", emergency: true},
+        {name: "Priya Nair", symptom: "Persistent Cough", emergency: false},
+        {name: "Arjun Reddy", symptom: "Severe Headache", emergency: false},
+        {name: "Sneha Patel", symptom: "Stomach Pain", emergency: true},
+        {name: "Vikram Singh", symptom: "Chest Discomfort", emergency: true}
+    ];
+    localStorage.setItem("patients", JSON.stringify(patients));
+}
+
+document.getElementById("appointCount").innerHTML = patients.length + " Patients Today";
+document.getElementById("requestCount").innerHTML = patients.length + " New Requests";
+
+let critical = patients.filter(p => p.emergency === true);
+document.getElementById("emergencyCount").innerHTML = critical.length + " Critical Alerts";
+
+let select = document.getElementById("patientSelect");
+patients.forEach(function(p) {
+    let option = document.createElement("option");
+    option.value = p.name;
+    option.textContent = p.name + " - " + p.symptom;
+    select.appendChild(option);
+});
+
+function viewSchedule() {
+    let txt = "📅 TODAY'S APPOINTMENTS\n\n";
+    patients.forEach((p, i) => txt += `${i+1}. ${p.name} — ${p.symptom}\n`);
+    alert(txt);
+}
+
+function openRequests() {
+    let txt = "🧑‍⚕ PATIENT REQUESTS\n\n";
+    patients.forEach((p, i) => txt += `${i+1}. ${p.name} — ${p.symptom}\n`);
+    alert(txt);
+}
+
+function emergencyNow() {
+    if (critical.length === 0) return alert("✅ No critical emergencies right now.");
+    let txt = "🚨 EMERGENCY CASES\n\n";
+    critical.forEach((p, i) => txt += `${i+1}. ${p.name} — ${p.symptom}\n`);
+    alert(txt);
+}
+
+function showPatientDetails() {
+    let name = document.getElementById("patientSelect").value;
+    let box = document.getElementById("patientInfo");
+    if (!name) { box.innerHTML = ""; return; }
+
+    let patient = patients.find(p => p.name === name);
+    if (!patient) return;
+
+    box.innerHTML = `
+        <h3 style="color:#0A6B5F; margin:15px 0 10px;">${patient.name}</h3>
+        <p><strong>Symptom:</strong> ${patient.symptom}</p>
+        <p><strong>Precautions:</strong></p>
+        <ul style="margin-left:20px; line-height:1.8;">
+            <li>Complete bed rest</li>
+            <li>Stay well hydrated</li>
+            <li>Avoid cold & outside food</li>
+            <li>Monitor vitals regularly</li>
+        </ul>
+    `;
+    document.getElementById("patientName").value = patient.name;
+}
+
+function createPrescription() {
+    let name = document.getElementById("patientName").value.trim();
+    let med = document.getElementById("medicine").value.trim();
+    let days = document.getElementById("days").value.trim();
+    if (!name || !med || !days) return alert("Please fill all fields");
+
+    document.getElementById("prescriptionResult").innerHTML = `
+        <h3 style="color:#0A6B5F;">✅ Prescription Generated</h3>
+        <p><strong>Patient:</strong> ${name}</p>
+        <p><strong>Medicine:</strong> ${med}</p>
+        <p><strong>Duration:</strong> ${days} days</p>
+        <p style="margin-top:12px; color:#1A9A8B; font-weight:700;">
+            👨‍⚕ Approved • ${new Date().toLocaleDateString()}
+        </p>
+    `;
+}
+
+// ============== CHATBOT SCRIPT ==============
+const chatBody = document.getElementById("chatBody");
+const chatInput = document.getElementById("chatInput");
+const chatWindow = document.getElementById("chatWindow");
+
+function toggleChat() {
+    chatWindow.classList.toggle("active");
+    if (chatWindow.classList.contains("active") && chatBody.children.length === 0) {
+        addBotMessage("Hello Doctor! 👋 How can I assist you today?<br>I can help with medicine dosage, symptoms, or quick medical references.");
+    }
+}
+
+function addBotMessage(text) {
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "chat-message bot";
+    msgDiv.innerHTML = `<div class="bubble">${text}</div>`;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function addUserMessage(text) {
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "chat-message user";
+    msgDiv.innerHTML = `<div class="bubble">${text}</div>`;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addUserMessage(text);
+    chatInput.value = "";
+
+    // Simple AI-like responses
+    setTimeout(() => {
+        let reply = "I'm here to help! Could you please rephrase?";
+
+        const lower = text.toLowerCase();
+        if (lower.includes("dosage") || lower.includes("dose")) {
+            reply = "For Paracetamol 500mg, usual adult dose is 1 tablet every 6-8 hours. Max 4 tablets/day. Always check patient history.";
+        } 
+        else if (lower.includes("fever") || lower.includes("temperature")) {
+            reply = "For fever above 101°F, recommend Paracetamol + hydration. If persists >48 hrs, suggest blood tests.";
+        } 
+        else if (lower.includes("cough")) {
+            reply = "Dry cough: Levocetirizine + Montelukast. Wet cough: Ambroxol syrup. Advise steam inhalation.";
+        } 
+        else if (lower.includes("headache")) {
+            reply = "Common relief: Paracetamol or Ibuprofen. Rule out migraine or stress. Rest in dark room.";
+        } 
+        else if (lower.includes("emergency") || lower.includes("critical")) {
+            reply = "For any chest pain, breathing difficulty, or loss of consciousness — advise immediate ER referral.";
+        } 
+        else if (lower.includes("thank")) {
+            reply = "You're welcome, Doctor! Stay safe and keep saving lives ❤️";
+        }
+
+        addBotMessage(reply);
+    }, 600);
+}
+
+// Welcome message when page loads
+window.onload = () => {
+    // Existing onload code already runs above
+};
+</script>
+</body>
+</html>

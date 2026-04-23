@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeLine Dashboard Pro</title>
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    
+    body{
+        background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), 
+                    url('https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=2070') no-repeat center center fixed;
+        background-size: cover;
+        color: #333;
+    }
+
+    .topbar{
+        background: linear-gradient(135deg, #0A6B5F, #1A9A8B);
+        color:#fff;
+        padding:18px;
+        text-align:center;
+        font-size:28px;
+        font-weight:bold;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .tabs{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+        padding:15px;
+        background:rgba(255,255,255,0.95);
+        box-shadow:0 2px 10px rgba(0,0,0,.15);
+    }
+
+    .tabs button{
+        padding:12px 18px;
+        border:none;
+        background:#1A9A8B;
+        color:#fff;
+        border-radius:8px;
+        cursor:pointer;
+        font-weight:600;
+        transition: all 0.3s;
+    }
+
+    .tabs button:hover{
+        background:#0A6B5F;
+        transform: translateY(-2px);
+    }
+
+    .container{padding:20px}
+
+    .section{
+        display:none;
+        background:rgba(255,255,255,0.98);
+        padding:20px;
+        border-radius:12px;
+        box-shadow:0 6px 20px rgba(0,0,0,.15);
+        margin-bottom:20px;
+    }
+
+    .section.active{display:block}
+
+    h2{
+        color:#0A6B5F;
+        margin-bottom:15px;
+        font-size:24px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        margin-top:10px;
+        background:#fff;
+        border-radius:8px;
+        overflow:hidden;
+    }
+
+    th,td{
+        border:1px solid #ddd;
+        padding:10px;
+        text-align:center;
+    }
+
+    th{
+        background:#0A6B5F;
+        color:#fff;
+    }
+
+    input,select{
+        width:100%;
+        padding:10px;
+        margin:10px 0;
+        border:1px solid #ccc;
+        border-radius:8px;
+        font-size:15px;
+    }
+
+    button.action{
+        padding:11px 16px;
+        border:none;
+        background:#1A9A8B;
+        color:#fff;
+        border-radius:8px;
+        cursor:pointer;
+        margin:5px 0;
+        font-weight:600;
+    }
+
+    button.action:hover{
+        background:#0A6B5F;
+    }
+
+    .result{
+        margin-top:12px;
+        padding:15px;
+        background:#f8fffe;
+        border-left:5px solid #1A9A8B;
+        border-radius:10px;
+        line-height:1.7;
+    }
+
+    .logout{
+        display:block;
+        margin:25px auto;
+        padding:12px 25px;
+        background:#d63031;
+        color:#fff;
+        border:none;
+        border-radius:8px;
+        font-size:16px;
+        cursor:pointer;
+    }
+
+    .modal{
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.65);
+        z-index:999;
+        overflow:auto;
+    }
+
+    .modal-box{
+        background:#fff;
+        width:90%;
+        max-width:430px;
+        margin:40px auto;
+        padding:25px;
+        border-radius:12px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .history-card{
+        border-bottom:1px solid #eee;
+        padding:12px 0;
+    }
+</style>
+</head>
+<body>
+
+<div class="topbar">🏥 LifeLine Dashboard Pro</div>
+
+<div class="tabs">
+    <button onclick="showTab('icu')">ICU Beds</button>
+    <button onclick="showTab('blood')">Blood Bank</button>
+    <button onclick="showTab('ambulance')">Ambulance</button>
+    <button onclick="showTab('doctor')">Doctors</button>
+    <button onclick="showTab('history')">History</button>
+</div>
+
+<div class="container">
+    <!-- ICU Beds -->
+    <div id="icu" class="section active">
+        <h2>ICU Beds Availability</h2>
+        <table>
+            <tr>
+                <th>Hospital</th>
+                <th>Total</th>
+                <th>Available</th>
+                <th>Book</th>
+            </tr>
+            <tr>
+                <td>Apollo Hospitals</td>
+                <td>25</td>
+                <td id="apolloBeds">14</td>
+                <td><button class="action" onclick="book('Apollo Hospitals ICU',2800,'apolloBeds')">Book</button></td>
+            </tr>
+            <tr>
+                <td>Manipal Hospital</td>
+                <td>22</td>
+                <td id="manipalBeds">11</td>
+                <td><button class="action" onclick="book('Manipal Hospital ICU',2500,'manipalBeds')">Book</button></td>
+            </tr>
+            <tr>
+                <td>Fortis Hospital</td>
+                <td>20</td>
+                <td id="fortisBeds">9</td>
+                <td><button class="action" onclick="book('Fortis Hospital ICU',2700,'fortisBeds')">Book</button></td>
+            </tr>
+            <tr>
+                <td>Max Super Speciality</td>
+                <td>18</td>
+                <td id="maxBeds">7</td>
+                <td><button class="action" onclick="book('Max Hospital ICU',2600,'maxBeds')">Book</button></td>
+            </tr>
+            <tr>
+                <td>Narayana Health</td>
+                <td>30</td>
+                <td id="narayanaBeds">16</td>
+                <td><button class="action" onclick="book('Narayana Health ICU',2200,'narayanaBeds')">Book</button></td>
+            </tr>
+            <tr>
+                <td>Medanta - The Medicity</td>
+                <td>24</td>
+                <td id="medantaBeds">12</td>
+                <td><button class="action" onclick="book('Medanta ICU',2900,'medantaBeds')">Book</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Blood Bank, Ambulance, Doctor, and History sections remain the same as your original code -->
+    <!-- Blood Bank -->
+    <div id="blood" class="section">
+        <h2>Blood Bank</h2>
+        <table>
+            <tr><th>Hospital / Bank</th><th>Available Blood Groups</th><th>Book</th></tr>
+            <tr><td>Red Cross Blood Bank</td><td>A+, A-, O+, O-, B+, B-</td><td><button class="action" onclick="book('Red Cross Blood Bank',1200,'')">Book</button></td></tr>
+            <tr><td>Apollo Blood Bank</td><td>AB+, AB-, O-, A-, B+</td><td><button class="action" onclick="book('Apollo Blood Bank',1500,'')">Book</button></td></tr>
+            <tr><td>Manipal Blood Services</td><td>A+, B+, O+, AB+</td><td><button class="action" onclick="book('Manipal Blood Services',1400,'')">Book</button></td></tr>
+            <tr><td>Fortis Blood Bank</td><td>O-, A-, B-, AB-</td><td><button class="action" onclick="book('Fortis Blood Bank',1600,'')">Book</button></td></tr>
+            <tr><td>Narayana Blood Centre</td><td>All Blood Groups Available</td><td><button class="action" onclick="book('Narayana Blood Centre',1300,'')">Book</button></td></tr>
+        </table>
+    </div>
+
+    <!-- Ambulance -->
+    <div id="ambulance" class="section">
+        <h2>Ambulance Services</h2>
+        <table>
+            <tr><th>Service Provider</th><th>ETA</th><th>Phone</th><th>Call</th></tr>
+            <tr><td>Apollo Emergency Ambulance</td><td>3-5 Min</td><td>1066</td><td><a href="tel:1066"><button class="action">Call</button></a></td></tr>
+            <tr><td>Government Emergency (108)</td><td>5-8 Min</td><td>108</td><td><a href="tel:108"><button class="action">Call</button></a></td></tr>
+            <tr><td>Manipal Quick Response</td><td>4-7 Min</td><td>9876543210</td><td><a href="tel:9876543210"><button class="action">Call</button></a></td></tr>
+            <tr><td>Fortis LifeLine Ambulance</td><td>6-10 Min</td><td>9876543222</td><td><a href="tel:9876543222"><button class="action">Call</button></a></td></tr>
+            <tr><td>Medanta Critical Care Ambulance</td><td>5-9 Min</td><td>9876543333</td><td><a href="tel:9876543333"><button class="action">Call</button></a></td></tr>
+            <tr><td>Private BLS Ambulance</td><td>7-12 Min</td><td>9876544444</td><td><a href="tel:9876544444"><button class="action">Call</button></a></td></tr>
+        </table>
+    </div>
+
+    <!-- Doctor -->
+    <div id="doctor" class="section">
+        <h2>Doctor Appointment</h2>
+        <input type="text" id="doctorInput" placeholder="Enter symptom (e.g., heart, skin, child, fever)">
+        <button class="action" onclick="showDoctor()">Find Doctor</button>
+        <div id="doctorResult" class="result"></div>
+    </div>
+
+    <!-- History -->
+    <div id="history" class="section">
+        <h2>Booking History</h2>
+        <div class="result" id="historyBox">No bookings yet.</div>
+    </div>
+</div>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+<!-- BOOKING MODAL -->
+<div class="modal" id="bookingModal">
+    <div class="modal-box">
+        <h2>Patient Details</h2>
+        <div class="result" id="hospitalNameBox"></div>
+        <input type="text" id="pname" placeholder="Patient Name">
+        <input type="number" id="pphone" placeholder="Phone Number">
+        <div id="bedField">
+            <input type="number" id="bedsNeeded" placeholder="Number of Beds">
+            <div id="doctorField" style="display:none;">
+                <input type="date" id="appointDate">
+                <input type="time" id="appointTime">
+            </div>
+        </div>
+        <div id="bloodField" style="display:none;">
+            <select id="bloodGroup">
+                <option value="">Select Blood Group</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+            </select>
+            <input type="number" id="bloodUnits" placeholder="Units Required">
+        </div>
+        <input type="number" id="page" placeholder="Age">
+        <select id="pgender">
+            <option value="">Select Gender</option>
+            <option>Male</option><option>Female</option><option>Other</option>
+        </select>
+        <button class="action" onclick="generateOTP()">Generate OTP</button>
+        <input type="text" id="otpBox" placeholder="Enter OTP">
+        <div class="result" id="otpShow"></div>
+        <button class="action" onclick="confirmBooking()">Confirm Booking</button>
+        <button class="logout" onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
+<!-- RECEIPT MODAL -->
+<div class="modal" id="receiptModal">
+    <div class="modal-box">
+        <h2 style="text-align:center;color:#0A6B5F;">🏥 LifeLine Receipt</h2>
+        <div id="receiptBox" class="result"></div>
+        <select id="payMode">
+            <option>UPI</option>
+            <option>Debit Card</option>
+            <option>Net Banking</option>
+            <option>Cash</option>
+            <option>QR Code</option>
+        </select>
+        <div id="qrBox" style="display:none;text-align:center;margin-top:15px;">
+            <p><b>Scan QR to Pay</b></p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=LifeLinePayment" width="180">
+            <p>UPI ID: lifeline@upi</p>
+        </div>
+        <button class="action" onclick="payNow()">Pay Now</button>
+        <button class="logout" onclick="closeReceipt()">Close</button>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCQcip6zkHf6Lr74Dq0VbD95Rcq8dIVcUI",
+  authDomain: "lifeline-dashboard-ad2b7.firebaseapp.com",
+  projectId: "lifeline-dashboard-ad2b7",
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+<script>
+// Your original JavaScript remains unchanged
+let generatedOTP = "";
+let selectedHospital = "";
+let selectedAmount = 0;
+let selectedBedId = "";
+let bookedBeds = 1;
+let pendingHistory = "";
+let doctorToken = "";
+let doctorHospital = "";
+let doctorPhone = "";
+
+function showTab(id) {
+    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+function book(name, amount, bedId) {
+    selectedHospital = name;
+    selectedAmount = amount;
+    selectedBedId = bedId;
+    document.getElementById("hospitalNameBox").innerHTML =
+        "Selected: <b>" + name + "</b><br>Amount: ₹" + amount;
+    document.getElementById("bookingModal").style.display = "block";
+
+    document.getElementById("bedField").style.display = "none";
+    document.getElementById("bloodField").style.display = "none";
+    document.getElementById("doctorField").style.display = "none";
+
+    if (name.toLowerCase().includes("blood")) {
+        document.getElementById("bloodField").style.display = "block";
+    }
+    else if (name.toLowerCase().includes("appointment")) {
+        document.getElementById("bedField").style.display = "block";
+        document.getElementById("doctorField").style.display = "block";
+        document.getElementById("bedsNeeded").style.display = "none";
+    }
+    else {
+        document.getElementById("bedField").style.display = "block";
+        document.getElementById("bedsNeeded").style.display = "block";
+    }
+}
+
+function closeModal() { document.getElementById("bookingModal").style.display = "none"; }
+
+function generateOTP() {
+    generatedOTP = Math.floor(1000 + Math.random() * 9000);
+    document.getElementById("otpShow").innerHTML = "<b>OTP:</b> " + generatedOTP + " <small>(Demo OTP)</small>";
+}
+
+function confirmBooking() {
+    let patient = document.getElementById("pname").value;
+    let otp = document.getElementById("otpBox").value;
+    if (patient === "") {
+        alert("Please enter patient name");
+        return;
+    }
+    if (otp !== generatedOTP.toString()) {
+        alert("Invalid OTP");
+        return;
+    }
+
+    let total = selectedAmount;
+    let extraDetails = "";
+
+    if (selectedHospital.toLowerCase().includes("blood")) {
+        let group = document.getElementById("bloodGroup").value || "Not Selected";
+        let units = parseInt(document.getElementById("bloodUnits").value) || 1;
+        bookedBeds = units;
+        total = selectedAmount * units;
+        extraDetails = `<br><b>Blood Group:</b> ${group}<br><b>Units:</b> ${units}`;
+    }
+    else if (selectedHospital.toLowerCase().includes("appointment")) {
+        let date = document.getElementById("appointDate").value;
+        let time = document.getElementById("appointTime").value;
+        extraDetails = `<br><b>Hospital:</b> ${doctorHospital}<br><b>Phone:</b> ${doctorPhone}<br><b>Date:</b> ${date}<br><b>Time:</b> ${time}`;
+    }
+    else {
+        bookedBeds = parseInt(document.getElementById("bedsNeeded").value) || 1;
+        total = selectedAmount * bookedBeds;
+        extraDetails = `<br><b>Beds Booked:</b> ${bookedBeds}`;
+    }
+
+    pendingHistory = `<div class='history-card'>
+        <b>Service:</b> ${selectedHospital}
+        ${extraDetails}
+        <br><b>Patient:</b> ${patient}
+        <br><b>Total:</b> ₹${total + 100}`;
+
+    closeModal();
+
+    document.getElementById("receiptBox").innerHTML =
+        `<b>Service:</b> ${selectedHospital}
+        ${extraDetails}
+        <br><b>Patient:</b> ${patient}
+        <br><b>Base Amount:</b> ₹${total}
+        <br><b>GST & Service:</b> ₹100
+        <hr><b>Total: ₹${total + 100}</b>`;
+
+    document.getElementById("receiptModal").style.display = "block";
+}
+
+function payNow() {
+    let mode = document.getElementById("payMode").value;
+    if (mode === "QR Code") {
+        document.getElementById("qrBox").style.display = "block";
+        alert("Please scan the QR code to complete payment");
+        return;
+    } else {
+        document.getElementById("qrBox").style.display = "none";
+    }
+
+    if (selectedBedId !== "") {
+        if (selectedHospital.includes("ICU")) {
+
+    let hospitalName = selectedHospital.replace(" ICU", "");
+
+    db.collection("icu_beds")
+    .where("name", "==", hospitalName)
+    .get()
+    .then((snapshot) => {
+
+        snapshot.forEach((doc) => {
+            let current = doc.data().available;
+            let updated = current - bookedBeds;
+
+            if (updated < 0) updated = 0;
+
+            db.collection("icu_beds").doc(doc.id).update({
+                available: updated
+            });
+        });
+
+    });
+}
+    }
+
+    doctorToken = "";
+    if (selectedHospital.toLowerCase().includes("appointment")) {
+        doctorToken = Math.floor(100 + Math.random() * 900);
+        pendingHistory += `<br><b>Token No:</b> ${doctorToken}`;
+    }
+
+    pendingHistory += `<br><b>Paid Via:</b> ${mode}<br><b>Date:</b> ${new Date().toLocaleString()}</div>`;
+
+    let historyBox = document.getElementById("historyBox");
+    if (historyBox.innerHTML === "No bookings yet.") {
+        historyBox.innerHTML = pendingHistory;
+    } else {
+        historyBox.innerHTML = pendingHistory + historyBox.innerHTML;
+    }
+
+    if (doctorToken !== "") {
+        alert(`Payment Successful via ${mode}\nYour Token Number: ${doctorToken}`);
+    } else {
+        alert(`Payment Successful via ${mode}`);
+    }
+    db.collection("bookings").add({
+    service: selectedHospital,
+    patient: document.getElementById("pname").value,
+    amount: selectedAmount,
+    date: new Date().toLocaleString()
+});
+    closeReceipt();
+}
+
+function closeReceipt() {
+    document.getElementById("receiptModal").style.display = "none";
+    document.getElementById("qrBox").style.display = "none";
+}
+
+function showDoctor() {
+    let symptom = document.getElementById("doctorInput").value.toLowerCase().trim();
+    let doctor = "Dr. Priya Sharma";
+    let fee = 600;
+    doctorHospital = "Apollo Hospitals";
+    doctorPhone = "9876501111";
+
+    if (symptom.includes("heart") || symptom.includes("cardiac")) {
+        doctor = "Dr. Rahul Mehra (Cardiologist)";
+        fee = 1500;
+        doctorHospital = "Fortis Hospital";
+        doctorPhone = "9876502222";
+    }
+    else if (symptom.includes("skin") || symptom.includes("derma")) {
+        doctor = "Dr. Meena Kapoor (Dermatologist)";
+        fee = 800;
+        doctorHospital = "Manipal Hospital";
+        doctorPhone = "9876503333";
+    }
+    else if (symptom.includes("child") || symptom.includes("pediatric")) {
+        doctor = "Dr. Ramesh Kumar (Pediatrician)";
+        fee = 900;
+        doctorHospital = "Narayana Health";
+        doctorPhone = "9876504444";
+    }
+    else if (symptom.includes("fever") || symptom.includes("general")) {
+        doctor = "Dr. Anjali Gupta (General Physician)";
+        fee = 500;
+        doctorHospital = "Max Super Speciality";
+        doctorPhone = "9876505555";
+    }
+
+    document.getElementById("doctorResult").innerHTML =
+        `${doctor}<br>
+        Hospital: ${doctorHospital}<br>
+        Phone: ${doctorPhone}<br>
+        Consultation Fee: ₹${fee}<br>
+        <a href="tel:${doctorPhone}"><button class="action">Call Doctor</button></a><br>
+        <button class="action" onclick="book('${doctor} Appointment', ${fee}, '')">Book Appointment</button>`;
+}
+
+function logout() {
+    if (confirm("Are you sure you want to logout?")) {
+        window.location.href = "index.html";
+    }
+}
+function loadICURealTime() {
+    db.collection("icu_beds").onSnapshot((snapshot) => {
+
+        snapshot.forEach((doc) => {
+            let data = doc.data();
+
+            if (data.name === "Apollo Hospitals") {
+                document.getElementById("apolloBeds").innerText = data.available;
+            }
+            if (data.name === "Manipal Hospital") {
+                document.getElementById("manipalBeds").innerText = data.available;
+            }
+            if (data.name === "Fortis Hospital") {
+                document.getElementById("fortisBeds").innerText = data.available;
+            }
+            if (data.name === "Max Super Speciality") {
+                document.getElementById("maxBeds").innerText = data.available;
+            }
+            if (data.name === "Narayana Health") {
+                document.getElementById("narayanaBeds").innerText = data.available;
+            }
+            if (data.name === "Medanta - The Medicity") {
+                document.getElementById("medantaBeds").innerText = data.available;
+            }
+        });
+
+    });
+}
+function loadHistoryFromDB() {
+    const box = document.getElementById("historyBox");
+
+    db.collection("bookings")
+    .onSnapshot((snapshot) => {
+
+        box.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+            let data = doc.data();
+
+            box.innerHTML += `
+                <div class="history-card">
+                <b>${data.service}</b><br>
+                Patient: ${data.patient}<br>
+                Amount: ₹${data.amount}<br>
+                Date: ${data.date}
+                </div>
+            `;
+        });
+
+    });
+}
+loadHistoryFromDB();
+
+</script>
+loadICURealTime();
+</body>
+</html>
