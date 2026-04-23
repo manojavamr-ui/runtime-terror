@@ -3,34 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LifeLine Admin Panel</title>
+<title>LifeLine Admin Panel Pro</title>
 
 <style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Segoe UI, Arial, sans-serif;
+font-family:Segoe UI,Arial,sans-serif;
 }
 
 body{
 background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 min-height:100vh;
-color:white;
+color:#fff;
 }
 
-/* Topbar */
+/* Header */
 .topbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 30px;
+padding:18px 28px;
 background:rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
-box-shadow:0 8px 20px rgba(0,0,0,0.25);
+backdrop-filter:blur(14px);
 position:sticky;
 top:0;
 z-index:1000;
+box-shadow:0 10px 20px rgba(0,0,0,0.25);
 }
 
 .topbar h2{
@@ -38,7 +38,7 @@ font-size:30px;
 font-weight:800;
 }
 
-.top-right{
+.right-top{
 display:flex;
 gap:12px;
 align-items:center;
@@ -46,81 +46,14 @@ align-items:center;
 
 .badge{
 padding:8px 14px;
-background:#00b894;
 border-radius:20px;
+background:#00b894;
 font-size:14px;
 font-weight:700;
 }
 
-/* Dashboard */
-.container{
-padding:25px;
-}
-
-/* Stats */
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
-margin-bottom:25px;
-}
-
-.stat-card{
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
-padding:22px;
-border-radius:18px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
-}
-
-.stat-card h3{
-font-size:16px;
-color:#dfe6e9;
-margin-bottom:10px;
-}
-
-.stat-card h1{
-font-size:34px;
-}
-
-/* Main Cards */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-}
-
-.card{
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
-padding:22px;
-border-radius:18px;
-box-shadow:0 10px 22px rgba(0,0,0,0.2);
-}
-
-.card h2{
-margin-bottom:15px;
-font-size:22px;
-}
-
-.card ul{
-list-style:none;
-max-height:350px;
-overflow-y:auto;
-padding-right:5px;
-}
-
-.card li{
-padding:12px;
-margin-bottom:10px;
-background:rgba(255,255,255,0.08);
-border-radius:12px;
-line-height:1.6;
-}
-
-/* Buttons */
 .btn{
-padding:12px 22px;
+padding:11px 18px;
 border:none;
 border-radius:10px;
 cursor:pointer;
@@ -136,27 +69,128 @@ background:#e74c3c;
 background:#c0392b;
 }
 
-/* Footer */
+/* Container */
+.container{
+padding:25px;
+}
+
+/* Stats */
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-bottom:22px;
+}
+
+.stat-card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
+padding:22px;
+border-radius:18px;
+box-shadow:0 12px 20px rgba(0,0,0,0.25);
+}
+
+.stat-card h3{
+font-size:15px;
+color:#dfe6e9;
+margin-bottom:8px;
+}
+
+.stat-card h1{
+font-size:34px;
+}
+
+/* Main grid */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+gap:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
+padding:22px;
+border-radius:18px;
+box-shadow:0 12px 22px rgba(0,0,0,0.2);
+}
+
+.card h2{
+margin-bottom:15px;
+font-size:22px;
+}
+
+/* Inputs */
+input,select{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:none;
+border-radius:10px;
+outline:none;
+}
+
+.add{
+width:100%;
+background:#00b894;
+margin-top:8px;
+}
+
+.add:hover{
+background:#019875;
+}
+
+/* Lists */
+.list-box{
+max-height:380px;
+overflow-y:auto;
+padding-right:5px;
+}
+
+.item{
+background:rgba(255,255,255,0.08);
+padding:14px;
+border-radius:14px;
+margin-bottom:10px;
+line-height:1.6;
+}
+
+.small-btn{
+padding:8px 12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:13px;
+font-weight:700;
+color:white;
+margin-top:8px;
+margin-right:8px;
+}
+
+.edit{
+background:#3498db;
+}
+
+.delete{
+background:#e74c3c;
+}
+
 .footer{
 text-align:center;
 padding:20px;
-margin-top:25px;
 color:#dfe6e9;
-font-size:14px;
+margin-top:25px;
 }
 
 @media(max-width:768px){
-
 .topbar{
 flex-direction:column;
 gap:12px;
 text-align:center;
 }
-
 .topbar h2{
 font-size:24px;
 }
-
 }
 </style>
 </head>
@@ -164,9 +198,9 @@ font-size:24px;
 <body>
 
 <div class="topbar">
-<h2>⚙️ LifeLine Admin Dashboard</h2>
+<h2>⚙️ LifeLine Admin Dashboard Pro</h2>
 
-<div class="top-right">
+<div class="right-top">
 <div class="badge">Live Monitoring</div>
 <button class="btn logout" onclick="logout()">Logout</button>
 </div>
@@ -193,38 +227,76 @@ font-size:24px;
 </div>
 
 <div class="stat-card">
-<h3>Available ICU Beds</h3>
+<h3>Total ICU Beds</h3>
 <h1 id="icuCount">0</h1>
 </div>
 
 </div>
 
-<!-- Main Cards -->
+<!-- Main Grid -->
 <div class="grid">
 
+<!-- ICU CRUD -->
 <div class="card">
-<h2>🏥 ICU Bed Status</h2>
-<ul id="icuList">Loading...</ul>
+<h2>🏥 ICU Beds Management</h2>
+
+<input type="text" id="hospitalName" placeholder="Hospital Name">
+<input type="number" id="beds" placeholder="Available Beds">
+<input type="text" id="location" placeholder="Location">
+
+<button class="btn add" onclick="addHospital()">Add Hospital</button>
+
+<br><br>
+
+<div id="icuList" class="list-box">Loading...</div>
 </div>
 
+<!-- Doctors CRUD -->
 <div class="card">
-<h2>👨‍⚕️ Doctors</h2>
-<ul id="doctorList">Loading...</ul>
+<h2>👨‍⚕️ Doctors Management</h2>
+
+<input type="text" id="doctorName" placeholder="Doctor Name">
+
+<select id="doctorStatus">
+<option value="Online">Online</option>
+<option value="Offline">Offline</option>
+</select>
+
+<input type="number" id="salary" placeholder="Salary">
+
+<button class="btn add" onclick="addDoctor()">Add Doctor</button>
+
+<br><br>
+
+<div id="doctorList" class="list-box">Loading...</div>
 </div>
 
+<!-- Blood CRUD -->
 <div class="card">
 <h2>🩸 Blood Centers</h2>
-<ul id="bloodList">Loading...</ul>
+
+<input type="text" id="bloodName" placeholder="Center Name">
+<input type="text" id="bloodType" placeholder="Blood Type (A+, O+, etc)">
+<input type="number" id="units" placeholder="Units">
+<input type="text" id="bloodLocation" placeholder="Location">
+
+<button class="btn add" onclick="addBlood()">Add Center</button>
+
+<br><br>
+
+<div id="bloodList" class="list-box">Loading...</div>
 </div>
 
+<!-- Users -->
 <div class="card">
-<h2>👥 User Management</h2>
-<ul>
-<li>✔ Patients Registered</li>
-<li>✔ Doctors Active</li>
-<li>✔ Admin Access Enabled</li>
-<li>✔ Secure Database Connected</li>
-</ul>
+<h2>👥 System Status</h2>
+
+<div class="item">✔ Patients Registered</div>
+<div class="item">✔ Doctors Active</div>
+<div class="item">✔ Secure Firebase Connected</div>
+<div class="item">✔ Real-Time Monitoring Enabled</div>
+<div class="item">✔ Admin Controls Enabled</div>
+
 </div>
 
 </div>
@@ -235,19 +307,18 @@ font-size:24px;
 © 2026 LifeLine Healthcare Admin Panel
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
 const firebaseConfig = {
-apiKey: "AIzaSyDWfO7uvrIFoQ1OkV6g4XdzmRjKq6lJxGs",
-authDomain: "healthcare-app-cf709.firebaseapp.com",
-projectId: "healthcare-app-cf709"
+apiKey:"AIzaSyDWfO7uvrIFoQ1OkV6g4XdzmRjKq6lJxGs",
+authDomain:"healthcare-app-cf709.firebaseapp.com",
+projectId:"healthcare-app-cf709"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
 
 /* Logout */
 function logout(){
@@ -256,97 +327,241 @@ window.location.href="login.html";
 }
 }
 
-/* ICU */
+/* ICU CRUD */
+function addHospital(){
+
+let name=document.getElementById("hospitalName").value;
+let beds=document.getElementById("beds").value;
+let location=document.getElementById("location").value;
+
+if(name==""||beds==""||location==""){
+alert("Fill all ICU fields");
+return;
+}
+
+db.collection("icu_beds").add({
+name:name,
+beds:Number(beds),
+location:location
+});
+
+hospitalName.value="";
+beds.value="";
+location.value="";
+}
+
 function loadICU(){
-const list=document.getElementById("icuList");
 
 db.collection("icu_beds").onSnapshot((snapshot)=>{
 
-list.innerHTML="";
+let html="";
 let totalBeds=0;
 let hospitals=0;
 
 snapshot.forEach((doc)=>{
+
 let data=doc.data();
 hospitals++;
-totalBeds += Number(data.beds || 0);
+totalBeds += Number(data.beds||0);
 
-let color = data.beds > 0 ? "#2ecc71" : "#e74c3c";
-
-list.innerHTML += `
-<li>
+html += `
+<div class="item">
 <b>${data.name}</b><br>
-Beds: <span style="color:${color}">${data.beds}</span><br>
-📍 ${data.location}
-</li>
+Beds: ${data.beds}<br>
+📍 ${data.location}<br>
+
+<button class="small-btn edit"
+onclick="updateBeds('${doc.id}',${data.beds})">
+Update
+</button>
+
+<button class="small-btn delete"
+onclick="deleteICU('${doc.id}')">
+Delete
+</button>
+</div>
 `;
+
 });
 
-document.getElementById("hospitalCount").innerText=hospitals;
-document.getElementById("icuCount").innerText=totalBeds;
+icuList.innerHTML=html;
+hospitalCount.innerText=hospitals;
+icuCount.innerText=totalBeds;
 
 });
 }
 
-/* Doctors */
+function updateBeds(id,current){
+let val=prompt("Enter New Beds",current);
+if(val!=null){
+db.collection("icu_beds").doc(id).update({
+beds:Number(val)
+});
+}
+}
+
+function deleteICU(id){
+if(confirm("Delete hospital?")){
+db.collection("icu_beds").doc(id).delete();
+}
+}
+
+/* Doctors CRUD */
+function addDoctor(){
+
+let name=doctorName.value;
+let status=doctorStatus.value;
+let salaryVal=salary.value;
+
+if(name==""||salaryVal==""){
+alert("Fill doctor fields");
+return;
+}
+
+db.collection("doctors").add({
+name:name,
+status:status,
+salary:Number(salaryVal)
+});
+
+doctorName.value="";
+salary.value="";
+}
+
 function loadDoctors(){
-const list=document.getElementById("doctorList");
 
 db.collection("doctors").onSnapshot((snapshot)=>{
 
-list.innerHTML="";
-let total=0;
+let html="";
+let count=0;
 
 snapshot.forEach((doc)=>{
+
 let data=doc.data();
-total++;
+count++;
 
-let color = data.status==="Online" ? "#2ecc71" : "#e74c3c";
-
-list.innerHTML += `
-<li>
+html += `
+<div class="item">
 <b>${data.name}</b><br>
-Status: <span style="color:${color}">${data.status}</span><br>
-₹${data.salary}
-</li>
+Status: ${data.status}<br>
+Salary: ₹${data.salary}<br>
+
+<button class="small-btn edit"
+onclick="updateDoctor('${doc.id}')">
+Update
+</button>
+
+<button class="small-btn delete"
+onclick="deleteDoctor('${doc.id}')">
+Delete
+</button>
+</div>
 `;
+
 });
 
-document.getElementById("doctorCount").innerText=total;
+doctorList.innerHTML=html;
+doctorCount.innerText=count;
 
 });
 }
 
-/* Blood */
+function updateDoctor(id){
+let status=prompt("Enter Online / Offline");
+if(status!=null){
+db.collection("doctors").doc(id).update({
+status:status
+});
+}
+}
+
+function deleteDoctor(id){
+if(confirm("Delete doctor?")){
+db.collection("doctors").doc(id).delete();
+}
+}
+
+/* Blood CRUD */
+function addBlood(){
+
+let name=bloodName.value;
+let type=bloodType.value;
+let unitsVal=units.value;
+let loc=bloodLocation.value;
+
+if(name==""||type==""||unitsVal==""||loc==""){
+alert("Fill blood center fields");
+return;
+}
+
+db.collection("blood_centers").add({
+name:name,
+bloodType:type,
+units:Number(unitsVal),
+location:loc
+});
+
+bloodName.value="";
+bloodType.value="";
+units.value="";
+bloodLocation.value="";
+}
+
 function loadBlood(){
-const list=document.getElementById("bloodList");
 
 db.collection("blood_centers").onSnapshot((snapshot)=>{
 
-list.innerHTML="";
-let total=0;
+let html="";
+let count=0;
 
 snapshot.forEach((doc)=>{
+
 let data=doc.data();
-total++;
+count++;
 
-let color = data.units > 0 ? "#2ecc71" : "#e74c3c";
-
-list.innerHTML += `
-<li>
+html += `
+<div class="item">
 <b>${data.name}</b><br>
-${data.bloodType || "All Types"}<br>
-Units: <span style="color:${color}">${data.units}</span><br>
-📍 ${data.location}
-</li>
+${data.bloodType}<br>
+Units: ${data.units}<br>
+📍 ${data.location}<br>
+
+<button class="small-btn edit"
+onclick="updateBlood('${doc.id}',${data.units})">
+Update
+</button>
+
+<button class="small-btn delete"
+onclick="deleteBlood('${doc.id}')">
+Delete
+</button>
+</div>
 `;
+
 });
 
-document.getElementById("bloodCount").innerText=total;
+bloodList.innerHTML=html;
+bloodCount.innerText=count;
 
 });
 }
 
+function updateBlood(id,current){
+let val=prompt("Enter New Units",current);
+if(val!=null){
+db.collection("blood_centers").doc(id).update({
+units:Number(val)
+});
+}
+}
+
+function deleteBlood(id){
+if(confirm("Delete blood center?")){
+db.collection("blood_centers").doc(id).delete();
+}
+}
+
+/* Load All */
 loadICU();
 loadDoctors();
 loadBlood();
