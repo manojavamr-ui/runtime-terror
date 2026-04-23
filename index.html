@@ -1,12 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeLine Hospital</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+.hero{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+}
+
+.hero-box{
+max-width:700px;
+}
+
+.hero h1{
+font-size:60px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:20px;
+margin-bottom:30px;
+color:#dfe6e9;
+}
+
+.buttons{
+display:flex;
+gap:15px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.btn-outline{
+padding:12px 22px;
+border:2px solid white;
+border-radius:8px;
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+.btn-outline:hover{
+background:white;
+color:#2c5364;
+}
+</style>
 </head>
-<h1> this is my first website </h1>
+
 <body>
-    
+
+<section class="hero">
+<div class="hero-box">
+<h1>🏥 LifeLine Hospital</h1>
+<p>Smart Emergency Healthcare Booking System for ICU Beds, Blood Bank, Ambulance & Doctor Appointments.</p>
+
+<div class="buttons">
+<a href="login.html" class="btn">Login</a>
+<a href="admin.html" class="btn-outline">Admin</a>
+</div>
+</div>
+</section>
+
 </body>
 </html>
